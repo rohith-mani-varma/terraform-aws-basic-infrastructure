@@ -10,6 +10,27 @@ Simple Terraform configuration that provisions:
 - An auto-generated SSH key pair and local `portfolio.pem`
 - Optional bootstrap script (`install.sh`) that is uploaded and executed on the instance
 
+## Architecture
+
+```
+Internet
+   │
+   ▼
+Internet Gateway
+   │
+   ▼
+Public Subnet
+   │
+   ▼
+EC2 Instance (Ubuntu + Nginx)
+   │
+   ▼
+Security Group
+   ├── SSH (22) from your IP
+   ├── HTTP (80) from anywhere
+   └── HTTPS (443) from anywhere
+```
+
 ## Files
 
 - `provider.tf` — Terraform block and provider configuration (AWS, HTTP, TLS, local)
@@ -47,3 +68,12 @@ ssh -i portfolio.pem ubuntu@<instance_public_ip>
 
 Replace `<instance_public_ip>` with the value from Terraform output.
 
+## Destroy (clean up)
+
+To remove all resources created by this Terraform configuration (VPC, subnet, instance, key pair, etc.):
+
+```bash
+terraform destroy
+```
+
+Review the plan and type `yes` when prompted. After it finishes, the EC2 instance, networking, and other resources are deleted. Your local `portfolio.pem` and `terraform.tfvars` remain on disk unless you delete them yourself.
