@@ -1,0 +1,14 @@
+# Private key - never commit
+*.pem
+portfolio.pem
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*.tfvars
+!*.tfvars.example
